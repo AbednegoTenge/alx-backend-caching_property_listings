@@ -1,38 +1,47 @@
 services:
   db:
-    image: postgres:latest
+    image: postgres:16
     environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: property_db
+      POSTGRES_USER: Abednego
+      POSTGRES_PASSWORD: Dontbesilly@abed123
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_v2:/var/lib/postgresql/data  # Changed name
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U Abednego -d property_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:latest
     ports:
       - "6380:6379"
     volumes:
-      - redis_data:/data
+      - redis_data_v2:/data  # Changed name
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   web:
     build: .
     env_file:
       - .env
-    environment:
-      - DATABASE_URL=${DATABASE_URL}
-      - REDIS_URL=${REDIS_URL}
     ports:
       - "3000:3000"
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     command: >
       sh -c "python manage.py migrate &&
              python manage.py runserver 0.0.0.0:3000"
 
 volumes:
-  postgres_data:
-  redis_data:
+  postgres_data_v2:  # New volume name
+  redis_data_v2:     # New volume name
