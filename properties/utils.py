@@ -2,7 +2,7 @@ from django.core.cache import cache
 from .models import Property
 
 
-def getallproperties():
+def get_all_properties():
     """
     Utility function to get all properties from the cache.
     """

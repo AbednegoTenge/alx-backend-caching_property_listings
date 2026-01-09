@@ -2,12 +2,12 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework import status
 from django.views.decorators.cache import cache_page
-from .utils import getallproperties
+from .utils import get_all_properties
 
 @cache_page(60 * 15)  # Cache the view for 15 minutes
 @api_view(['GET'])
 def property_list(request):
-    properties = getallproperties()
+    properties = get_all_properties()
 
     data = []
     for p in properties:
