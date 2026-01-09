@@ -3,3 +3,4 @@ django-redis
 django
 dotenv
 django-environ
+djangorestframework
