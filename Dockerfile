@@ -8,6 +8,8 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Set work directory
 WORKDIR /app
 
+# Create logs directory
+RUN mkdir -p /app/logs
 
 # Install Python dependencies
 COPY requirements.txt /app/
